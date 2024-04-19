@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('./partials/head') %>
+    <title>Blog</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      /* Custom CSS styles */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .blog-title {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+
+      .blog-cover-image {
+        width: 100%;
+        margin-bottom: 20px;
+        border-radius: 10px;
+      }
+
+      .comment-section {
+        margin-top: 30px;
+      }
+
+      .comment {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+      }
+
+      .comment img {
+        width: 50px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+
+      .comment pre {
+        margin-top: 5px;
+        white-space: pre-wrap;
+      }
+
+      .comment-form {
+        margin-top: 20px;
+      }
+
+      .comment-form input[type="text"] {
+        width: calc(100% - 90px);
+        margin-right: 10px;
+      }
+
+      .comment-form button {
+        width: 80px;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('./partials/nav') %>
+
+    <div class="container mt-4">
+      <h1 class="blog-title"><%= blog.title %></h1>
+      <img src="<%= blog.coverImageURL %>" class="blog-cover-image" />
+      <pre><%= blog.body %></pre>
+    </div>
+
+    <div class="container mt-4">
+      <img src="<%= blog.createdBy.profileImageURL %>" width="50px" /> <%=
+      blog.createdBy.fullName %>
+    </div>
+
+    <div class="container mt-3 comment-section">
+      <h2>Comments (<%= comments.length %>)</h2>
+      <% if (locals.user) { %>
+      <form
+        action="/blog/comment/<%= blog._id %>"
+        method="post"
+        class="comment-form"
+      >
+        <div class="mb-3">
+          <input
+            type="text"
+            name="content"
+            class="form-control"
+            placeholder="Enter your comment"
+          />
+          <button class="btn btn-sm btn-primary" type="submit">Add</button>
+        </div>
+      </form>
+      <% } %>
+      <div class="comments">
+        <% comments.forEach(comment => { %>
+        <div class="comment">
+          <img src="<%= comment.createdBy.profileImageURL %>" />
+          <%= comment.createdBy.fullName %>
+          <pre><%= comment.content %></pre>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <%- include('./partials/script') %>
+  </body>
+</html>
